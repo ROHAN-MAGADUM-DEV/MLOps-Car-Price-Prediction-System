@@ -16,7 +16,7 @@ def read_yaml(filepath: Path) -> ConfigBox:
 def create_directories(directories: list, verbose: bool = True) -> None:
     try:
         for directory in directories:
-            os.makedirs(directory)
+            os.makedirs(directory, exist_ok=True)
             if verbose:
                 logging.info(f"Created Directory: {directory}")
     except Exception as e:
