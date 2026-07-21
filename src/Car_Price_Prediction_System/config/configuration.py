@@ -1,6 +1,6 @@
 from Car_Price_Prediction_System.constants import *
 from Car_Price_Prediction_System.utils.common import read_yaml, create_directories
-from Car_Price_Prediction_System.entity.config_entity import DataIngestionConfig, DataValidationConfig
+from Car_Price_Prediction_System.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig
 
 class ConfigurationManager:
     def __init__(self, config_filepath=Config_Filepath, params_filepath=Params_Filepath, schema_filepath=Schema_Filepath):
@@ -38,3 +38,17 @@ class ConfigurationManager:
         )
 
         return data_validation_config
+
+    def get_data_transformation_config(self) -> DataTransformationConfig:
+        config = self.config.data_transformation
+
+        create_directories([config.root_dir])
+
+        data_transformation_config = DataTransformationConfig(
+            root_dir = config.root_dir,
+            data_file = config.data_file,
+            train_data_file_path = config.train_data_file_path,
+            test_data_file_path = config.test_data_file_path
+        )
+
+        return data_transformation_config
