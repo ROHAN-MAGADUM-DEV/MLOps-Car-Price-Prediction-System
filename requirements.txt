@@ -1,0 +1,12 @@
+numpy
+pandas
+python-box
+pyYAML
+ensure
+joblib
+matplotlib
+seaborn
+scikit-learn
+boto3>=1.40.0
+python-dotenv>=1.1.1
+-e .
