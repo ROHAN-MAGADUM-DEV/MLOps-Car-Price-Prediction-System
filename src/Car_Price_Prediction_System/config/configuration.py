@@ -1,6 +1,6 @@
 from Car_Price_Prediction_System.constants import *
 from Car_Price_Prediction_System.utils.common import read_yaml, create_directories
-from Car_Price_Prediction_System.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig
+from Car_Price_Prediction_System.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig
 
 class ConfigurationManager:
     def __init__(self, config_filepath=Config_Filepath, params_filepath=Params_Filepath, schema_filepath=Schema_Filepath):
@@ -48,7 +48,42 @@ class ConfigurationManager:
             root_dir = config.root_dir,
             data_file = config.data_file,
             train_data_file_path = config.train_data_file_path,
-            test_data_file_path = config.test_data_file_path
+            test_data_file_path = config.test_data_file_path,
+            preprocessor_obj_file_path = config.preprocessor_obj_file_path
         )
 
         return data_transformation_config
+
+    def get_model_trainer_config(self) -> ModelTrainerConfig:
+        config = self.config.model_trainer
+        schema = self.schema.TARGET_COLUMN
+    
+        create_directories([config.root_dir])
+    
+        model_trainer_config = ModelTrainerConfig(
+            root_dir = config.root_dir,
+            train_data_file_path = config.train_data_file_path,
+            target_column=schema.name,
+            mlflow_tracking_uri=config.mlflow_tracking_uri,
+            experiment_name=config.experiment_name
+        )
+    
+        return model_trainer_config
+
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        config = self.config.model_evaluation
+        schema = self.schema.TARGET_COLUMN
+    
+        create_directories([config.root_dir])
+    
+        model_evaluation_config = ModelEvaluationConfig(
+            root_dir=config.root_dir,
+            test_data_file_path=config.test_data_file_path,
+            model_dir=config.model_dir,
+            best_model_path=config.best_model_path,
+            mlflow_tracking_uri=config.mlflow_tracking_uri,
+            experiment_name=config.experiment_name,
+            target_column=schema.name
+        )
+    
+        return model_evaluation_config
